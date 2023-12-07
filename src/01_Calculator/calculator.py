@@ -1,43 +1,60 @@
-from operator import add, mul, sub, truediv
-from typing import List, Optional, Union
+from operator import add, mul, sub
+from operator import truediv as div
+from typing import List
 
-ops = {"+": add, "-": sub, "*": mul, "/": truediv}
-
-
-def _split_if_string(string_or_list: Union[List[str], str]) -> List[str]:
-    return string_or_list.split() if isinstance(string_or_list, str) else string_or_list
-
-
-def prefix_evaluate(prefix_equation: Union[List[str], str]) -> Optional[int]:
-    if not prefix_equation:
+def prefix_evaluate(prefix_evaluation: str) -> int:
+    if prefix_evaluation == "":
         return None
-    prefix_equation = _split_if_string(prefix_equation)
-    value_stack = []
-    while prefix_equation:
-        el = prefix_equation.pop()
-        if el not in ops:
-            value_stack.append(int(el))
-        else:
-            r_val = value_stack.pop()
-            l_val = value_stack.pop()
-            operation = ops[el]
-            value_stack.append(operation(r_val, l_val))
+    
+    stack = []
 
-    return value_stack[0]
+    for i in reversed(prefix_evaluation.split()):
+        if i not in '+-*/':
+            stack.append(int(i))
+        if i in '+-*/':
+            a = stack.pop()
+            b = stack.pop()
+            if i == '+':
+                otvet = add(a, b)
+            if i == '-':
+                otvet = sub(a, b)
+            if i == '*':
+                otvet = mul(a, b)
+            if i == '/':
+                otvet = div(a, b)
+            stack.append(otvet)
+
+    return(stack[0])
 
 
 def to_prefix(equation: str) -> str:
-    op_stack = []
-    prefix = []
+    vidznak = set('+-*/')
+    prior = {'+': 1, '-': 1, '*': 2, '/': 2}
+    itogo = []
+    znaki = []
 
-    for el in equation.split()[::-1]:
-        pass
+    for i in reversed(equation.split()):
+        if i not in vidznak:
+            if i != '(' and i != ')':
+                itogo.append(i)
+            if i == '(':
+                while znaki and znaki[-1]!=')': 
+                    itogo.append(znaki.pop())
+                znaki.pop()
+            if i == ')': 
+               znaki.append(i)   
+        if i in vidznak:
+            while znaki and znaki[-1]!=')' and prior[i]<=prior.get(znaki[-1], 0): 
+                itogo.append(znaki.pop())
+            znaki.append(i)
+    while znaki:
+        itogo.append(znaki.pop())
 
-    while op_stack:
-        prefix.append(op_stack.pop())
-
-    return " ".join(prefix[::-1])
-
+    return " ".join(list(reversed(itogo)))
+        
 
 def calculate(equation: str) -> int:
     return prefix_evaluate(to_prefix(equation))
+
+
+
