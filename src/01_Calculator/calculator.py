@@ -1,6 +1,5 @@
 from operator import add, mul, sub
 from operator import truediv as div
-from typing import List
 
 
 def prefix_evaluate(prefix_evaluation: str) -> int:
@@ -36,7 +35,7 @@ def to_prefix(equation: str) -> str:
 
     for i in reversed(equation.split()):
         if i not in vidznak:
-            if i != "(" and i != ")":
+            if i not in {"(", ")"}:
                 itogo.append(i)
             if i == "(":
                 while znaki and znaki[-1] != ")":
