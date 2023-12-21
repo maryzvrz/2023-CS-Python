@@ -1,6 +1,8 @@
 from datetime import date, datetime, timezone
 from typing import List
 
+DATE_VALUE_ERROR_MESSAGE = "bday must be date type"
+
 
 class Person:
     """
@@ -27,7 +29,7 @@ class Person:
         if isinstance(bday, date):
             self.bday = bday
         else:
-            raise ValueError("bday must be date type")
+            raise ValueError(DATE_VALUE_ERROR_MESSAGE)
 
     def __repr__(self) -> str:
         return f"Person({self.name!r}, {self.surname!r}, {self.sex!r}, {self.bday!r})"
@@ -36,7 +38,7 @@ class Person:
         return self.__repr__() == other.__repr__()
 
     def full_ages(self):
-        return date.today().year - self.bday.year
+        return datetime.now(tz=timezone.utc).date().year - self.bday.year
 
 
 class Student(Person):
@@ -85,8 +87,8 @@ class Group:
         for ind in range(len(self.group)):
             if str(self.group[ind]) != str(other.group[ind]):
                 return False
-        else:
-            return True
+            else:
+                return True
 
     def __repr__(self) -> str:
         return f"Group([{', '.join([repr(group) for group in self.group])}])"
