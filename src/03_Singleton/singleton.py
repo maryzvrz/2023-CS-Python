@@ -3,5 +3,5 @@ class Singleton:
 
     def __new__(cls):
         if Singleton.instance is None:
-            Singleton.instance = super(Singleton, cls).__new__(cls)
+            Singleton.instance = super().__new__(cls)
         return Singleton.instance
