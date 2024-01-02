@@ -50,5 +50,3 @@ for _ in range(nraz):
             if pole[i, j] == three:
                 if shrimp < two or shrimp > three:
                     pole[i, j] = 0
-
-print(pole)
