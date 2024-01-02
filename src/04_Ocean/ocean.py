@@ -6,10 +6,8 @@ pole = np.matrix(
 
 width, length = pole.shape
 nraz = 1
-raz = 0
 two = 2
 three = 3
-
 
 def neight(pole):
     neigh = []
